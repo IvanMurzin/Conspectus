@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="grey">#282C34</color>
+    <color name="clear_grey">#335B616E</color>
+    <color name="milk">#E6E9FF</color>
+    <color name="warm_milk">#80ECE6D9</color>
+    <color name="clear_milk">#80E6E9FF</color>
+    <color name="spanned_date">#E75858</color>
+    <color name="dark_blue">#33050F42</color>
+</resources>

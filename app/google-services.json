@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "294752211105",
+    "project_id": "conspectus-29d75",
+    "storage_bucket": "conspectus-29d75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294752211105:android:4cbeedcb6c7550215160e0",
+        "android_client_info": {
+          "package_name": "com.pac.conspectus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294752211105-nt8i428knkprcqkltaibqrledummkpgd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pac.conspectus",
+            "certificate_hash": "3d8e0d22b5c284cf0a8b3d4b70b0893c1bcc4d7c"
+          }
+        },
+        {
+          "client_id": "294752211105-sfkqvle6v1uduk9jsvfec37on0evvnqh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBOo-SF0QkYohj5t298Mx__M0BLqaPmzo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294752211105-sfkqvle6v1uduk9jsvfec37on0evvnqh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
