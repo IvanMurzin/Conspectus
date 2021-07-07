@@ -18,9 +18,8 @@ class HeadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_head)
-        //must be init for registration usage
+        //must init for registration usage
         Registrar.init(this)
-        MobileAds.initialize(this)
         //start RegistrationActivity or MainActivity after the boot time expires
         doAsync {
             Thread.sleep(BOOT_TIME)

@@ -8,14 +8,13 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.*
 import com.pac.conspectus.R
 import com.pac.conspectus.tool.*
 import kotlinx.android.synthetic.main.alert_dialog.*
@@ -35,7 +34,6 @@ class SelectFragment : Fragment() {
     private lateinit var loading: Dialog
     private lateinit var interstitialAd: InterstitialAd
 
-
     @SuppressLint("InflateParams")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +44,7 @@ class SelectFragment : Fragment() {
         //init loading alert
         loading = Alert.getLoading(activity ?: return null)
         //init ads
+        MobileAds.initialize(activity ?: return null)
         interstitialAd = InterstitialAd(activity)
         interstitialAd.adUnitId = getString(R.string.ads_id)
         interstitialAd.loadAd(AdRequest.Builder().build())
@@ -54,6 +53,7 @@ class SelectFragment : Fragment() {
                 interstitialAd.loadAd(AdRequest.Builder().build())
             }
         }
+
         //init buttons
         view.select_photo.setOnClickListener { selectPhoto() }
         view.select_file.setOnClickListener { selectFile() }
@@ -143,7 +143,7 @@ class SelectFragment : Fragment() {
 
     private fun processSelectFileResult(data: Intent?) {
         showAds()
-        val res = FileManager.getTextFromFile(activity ?: return, data)
+        val res = FileManager.getTextFromFile(activity ?: return, data?.data?: return)
         if (res == null) activity?.longToast(getString(R.string.wrong_path))
         else Storage.saveText(res)
         loading.dismiss()

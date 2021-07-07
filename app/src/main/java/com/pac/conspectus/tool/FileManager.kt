@@ -1,17 +1,23 @@
 package com.pac.conspectus.tool
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
 import com.aspose.words.Document
 import com.pac.conspectus.BuildConfig
 import kotlinx.android.synthetic.main.fragment_select.*
+import java.io.BufferedReader
 import java.io.File
+import java.io.IOException
+import java.io.InputStreamReader
 
 object FileManager {
 
@@ -93,24 +99,50 @@ object FileManager {
         return imageBitmaps
     }
 
-    fun getTextFromFile(activity: Activity, data: Intent?): String? {
-        //get input stream from uri
-        val inputStream = data?.data?.let { activity.contentResolver.openInputStream(it) }
-        //local directory with documents
-        val storageDirPath =
-            activity.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.absolutePath
-        //extension is the last chars before .
-        val fileExtension = data?.data.toString().substring(data?.data.toString().lastIndexOf('.'))
-        //create temp file
-        val tempFile = File("$storageDirPath/temp$fileExtension")
-        //wrong file path
-        if (fileExtension.length > 5) return null
-        tempFile.outputStream().use { inputStream?.copyTo(it) }
-        //use aspose words
-        val document = Document("$storageDirPath/temp$fileExtension")
-        tempFile.delete()
-        //first 79 chars is the information about aspose
-        return document.text.substring(79)
+    fun getTextFromFile(context: Context, uri: Uri): String {
+        //check uri format to avoid null
+        val extension =
+            if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
+                //if scheme is a content
+                val mime = MimeTypeMap.getSingleton()
+                mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
+            } else {
+                //if scheme is a File
+                //this will replace white spaces with %20 and also other special characters
+                //this will avoid returning null values on file name with spaces and special characters
+                MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(uri.path!!)).toString())
+            }
+
+        if (extension == "txt") {
+            //read txt file with bufferedReader
+            //get input stream from uri
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+            var line: String?
+            var text = ""
+            do {
+                line = bufferedReader.readLine()
+                text += line
+            } while (line != null)
+            bufferedReader.close()
+            return text
+        } else {
+            //read docx file with aspose
+            //get input stream from uri
+            val inputStream = context.contentResolver.openInputStream(uri)
+            //local directory with documents
+            val storageDirPath =
+                context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.absolutePath
+            //create temp file
+            val tempFile = File("$storageDirPath/temp$extension")
+            tempFile.outputStream().use { inputStream?.copyTo(it) }
+            //use aspose words
+            val document = Document("$storageDirPath/temp$extension")
+            tempFile.delete()
+            //first 79 chars is the information about aspose
+            return document.text.substring(79)
+        }
     }
+
 }
 
